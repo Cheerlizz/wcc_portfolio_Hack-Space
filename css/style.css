@@ -272,13 +272,16 @@ img{
 }
 
 #sea a{
-    background-image: url(../assets/images/sea.png);
+    background-image: url(../assets/images/sea2.png);
 }
 
 #boat a{
     background-image: url(../assets/images/boat.png);
 }
 
+#doc a{
+    background-image: url(../assets/images/orlando.png);
+}
 /* Media Queries for responsive design */
 
 /* Un-comment the body background-colors to see bold debug color change between screen sizes */
