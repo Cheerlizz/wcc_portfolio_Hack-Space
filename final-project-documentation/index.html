@@ -19,86 +19,143 @@
         </nav>
         <header class="documentation-header">
             <section class="center-text">
-                <h1>Work Title</h1>
-                <h2>by Your Name</h6>
-                <p>Write a one-sentence summary of what the project is.</p> 
+                <h1>Everorlando</h1>
+                <h2>by Yuelin Guo</h6>
+                <p>The polymorphous existence of communication through the cyborg's lens.</p> 
             </section>
         </header>
 
         <main class="documentation-page">
             <section>
-                <div class="responsive-video centered-content">
-                    <iframe title="vimeo-player" src="https://player.vimeo.com/video/644036051?h=b260a3b1b0" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-                </div>
+                <div style="padding:53.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/825085874?h=8116d9b46f&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Everorlando"></iframe></div>
+                <script src="https://player.vimeo.com/api/player.js"></script>
             </section>
             <section>
                 <h3>Introduction</h3>
-                <p>Write a short introduction, a short paragraph, giving a bit more detail about what the project is.</p>
+                <p>This audio-reactive project presents a fluid digital version of the communication happening in the material reality, the key is to construct an organic digital world in which dialogue is alive. The name “Everorlando” comes from Orlando: A Biography by Virginia Woolf, I consider it to be a virtual conscious body or a system in the informatics domain, it exists in communication and is recrafted by sound. She does not appear as a human avatar but as a hybrid of a mushroom and a rhizome, which is the biological metaphor of networks. The whole interaction happens in physical space, there’s no degradation, and the life of Everorlando continues as long as there is sound.</p>
             </section>
             <section>
                 <h3>Concept and Background Research</h3>
                 
-                <p>Write about the concept behind the project, in other words the creative or theoretical inspiration. Include details about any background research you may have done (don’t forget to include references in the reference section).</p>
-                <p>Consider writing about your work in relation to a creative, theoretical or computational tradition that you may be taking inspiration from, in other words think about how your work is situated in a particular making tradition. </p>
+                <p>The inspiration of this project came from the science-fiction film HER (2013), which is set in the near future, Theodore Twombly forms a deep emotional connection and developed a romantic relationship with his AI assistant Samantha. the dramatic twist happened when Theodore found Samantha has been talking with thousands of other users simultaneously and even fallen in love with hundreds of them. This plot shows the differences existing in the ways how humans and AI communicate and establish relationships respectively. </p>
+                <p>According to Donna Haraway, the development of communication technologies and biotechnology make all of us cyborgs, the chimeras of machines and organisms, on this precise, what is the digital form of communication should look like? I’d like to consider being a cyborg to be a new perspective on how we view the functions and principles working in this world, a new identity to imagine and challenge the current social reality and imagine a more contingency, flexible, and diverse existence of communication. Therefore, this project is the exploration of the polymorphous existence of communication from the perspective of cyborgs, and eventually, conceptualize and visualize this new communication process.</p>
                 
                 <!-- if you have a full width image try make it not too tall -->
-                <img src="../assets/images/repeating-diagonal-lines-strip.jpeg"/>
+                <div  class="image-container">
+                        <img  class="img" src="../assets/images/her_1.jpg"/>
+                        <div class="note">HER (2013)</div>
+                </div>                
                 
             </section>
             <section>
                 <h3>Technical Implementation</h3>
 
-                <!-- example of styling for three images, you can write your own styling -->
-                <div class="flex-container flex-basis-third">
-                    <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-square.jpeg"/>
+                <p>One of the most prominent features of cyborgs is the permeable boundaries, in the digital network, there’s no gender, and no conception of time, all of which are dissolved into rhizomatic networks. Therefore, I intended to build a digital biosystem that consists of organic composition but is not restricted by entities.</p>
+                
+                <p>At first, I started with three.js. Based on the experience of the mid-term project, I considered manipulating the attributes of the vertex shader to make modifications to the shape. That’s when I found another JavaScript library called shader-park-core for creating interactive procedural 3D shaders. It provides some functions to interact with the geometries, it’s worth noticing that in this library, 3d contents are created with a method called Sign Distance Filed, which means instead of using mesh, the 3d geometries and primitives are implicit and defined by equations. So, the scene can be defined as detailed as you want. Since GLSL and SDF are often used together, Shader Park provides a function that better bridges JavaScript and GLSL API, that is glslSDF(), which can generate a primitive from the provided GLSL function.</p>
+                
+                <div  class="image-container">
+                    <img class="img" src="../assets/images/final/rabbit.jpg"/>
+                    <div class="note">The signed distance field to the Stanford Bunny</div>
+                </div>    
+                
+                <p>Though SDF objects seem feasible to recraft with the help of function glslSDF(), a hurdle was the process of converting 3D objects into SDF code, later I found an interesting method in the form of the neural network, which proved to be a viable method for converting meshes into SDF, one of them is SIREN (dubbed sinusoidal representation networks). </p>
+                <p>SIREN can recover a room-scale scene given only its pointcloud and surface normals, accurately reproducing fine detail, in less than an hour of training. Since I’m doing the machine learning model, I tried the notebook provided by the developer with my own model, the result is quite satisfying and that didn’t take long to finish training.</p>
+                <!-- default flex item is for 4 & follows media query styling for home page -->
+                    <div  class="image-container ">
+                            <div class="flex-item">
+                                <img src="../assets/images/final/1.png"/>
+                            </div>
+                            <div class="flex-item">
+                                <img src="../assets/images/final/2.png"/>
+                            </div>
                     </div>
-                    <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-square.jpeg"/>
+                    <div class="image-container ">
+                        <div class="flex-item">
+                            <img src="../assets/images/final/3.png"/>
+                        </div>
+                        <div class="flex-item">
+                            <img src="../assets/images/final/4.png"/>
+                        </div>
+                        
                     </div>
-                    <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-square.jpeg"/>
-                    </div>
+                
+                <div  class="image-container">
+                    <img class="img" src="../assets/images/final/5.png"/>
+                    <div class="note">My experiment of neural network SIREN:the deformation process from a box to mushrooms with mixGeo()</div>
+                </div>
+                 <p>However, this path ended here because the principle of shader-park-core is like applying a 3d texture onto a geometry defined in JavaScript. Though I tried to import the whole library, the glslSDF() function cannot be recognized.</p>
+                
+                <div  class="image-container">
+                    <img class="img" src="../assets/images/final/p.png"/>
+                    <div class="note">
+                        computes the distance to the nearest of N points distributed over a sphere.
+                        </div>
                 </div>
                 
-                <p>Write about the process of implementing your project. What technical elements or hardware are involved in your system. Write about why you made certain technical or design decisions etc. </p>
+                <p>Therefore I turned to other geometry construction methods, and I ended up utilizing sphericalDistribution(), which could compute the distance to the nearest of N points distributed over a sphere, thus creating organic sphere shapes, the following is the development of my experiment which initially adapted from the examples provided by Torin Blankensmith.</p>
+                <!-- example of styling for three images, you can write your own styling -->
+                <!-- <div class="flex-container flex-basis-third">
+                    <div class="flex-item">
+                        <img src="../assets/images/final/1.png"/>
+                    </div>
+                    <div class="flex-item">
+                        <img src="../assets/images/final/2.png"/>
+                    </div>
+                    <div class="flex-item">
+                        <img src="../assets/images/final/3.png"/>
+                    </div>
+                    <div class="flex-item">
+                        <img src="../assets/images/final/4.png"/>
+                    </div>
+
+                    <img src="../assets/images/final/5.png"/>
+                </div> -->
+                
             
                 <!-- example of styling for three images, you can write your own styling -->
-                <div class="flex-container flex-basis-half">
+                <div class="image-container flex-basis-third">
                     <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-rect.jpeg"/>
+                        <img src="../assets/images/final/iris.png"/>
                     </div>
                     <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-rect.jpeg"/>
+                        <img src="../assets/images/final/butterfly.png"/>
                     </div>
+                    <div class="flex-item">
+                        <img src="../assets/images/final/final.png"/>
+                    </div> 
+                    
+        
+                       
+
+         
+                    <div class="note">Organic Forms</div>
                 </div>
 
-                <!-- default flex item is for 4 & follows media query styling for home page -->
-                <div class="flex-container">
-                    <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-rect.jpeg"/>
-                    </div>
-                    <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-rect.jpeg"/>
-                    </div>
-                    <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-rect.jpeg"/>
-                    </div>
-                    <div class="flex-item">
-                        <img src="../assets/images/repeating-diagonal-lines-rect.jpeg"/>
-                    </div>
-                </div>
+
+
+                
          
             </section>
             <section>
                 <h3>Reflection and Future Development</h3>
-                <p>Reflect on how the project went, what went well, what you learnt etc. Based on these reflections, conclude with how you would further develop this project if you were to make another version or how you would further develop your ideas.</p>
+                <p>I've been interested in exploring the 3d content, Shader Park is a convenient library to work with, however, it’s relatively new, and there is little information about it, the discussions from Discord helped me a lot. Apart from shader-park-core, I found other possibly useful libraries related to three.js, such as react-three, react-postprocessing, and react-xr. Since it’s a 3d object, I’m considering creating AR or VR with it, which can bridge the physical environment and digital world and create a multi-sensory experience.
+
+                    During the learning of those libraries and algorithms, I found it’s important to combine the strengths of each tool to achieve the goal, also, compatibility is an issue that needs to be considered.
+                    </p>
             </section>
             <section>
                 <h3>References</h3>
                 <ul>
-                    <li>Technical Reference example. Include link where possible.</li>
-                    <li>Conceptual Reference example. Include link where possible.</li>
+                    <h4>Technical Reference:</h4>
+                    <li>Shader park: https://shaderpark.com/ </li>
+                    <li>Producing SDFs with neural network:Sitzmann, Vincent, Julien Martel, Alexander Bergman, David Lindell, and Gordon Wetzstein. "Implicit neural representations with periodic activation functions." Advances in Neural Information Processing Systems 33 (2020): 7462-7473. </li>
+                    <li>Notebook of training SIREN: https://colab.research.google.com/github/vsitzmann/siren/blob/master/explore_siren.ipynb</li>
+                    <li>The explanation of fBMs:https://iquilezles.org/articles/warp/.</li>
+                  
+                    <h4>Conceptual Reference:</h4>
+                    <li>Haraway, Donna J. "A cyborg manifesto: Science, technology, and socialist-feminism in the late twentieth century." In Posthumanism, pp. 69-84. Palgrave, London, 2000.</li>
+                    <li>McCorduck, Pamela. "Sex, lies and avatars." Wired 4, no. 4 (1996): 155-166.</li>
                 </ul>
             </section>
         </main>

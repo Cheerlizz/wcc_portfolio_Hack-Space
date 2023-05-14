@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+
+        <!-- meta viewport tag needed to make site responsive on mobile devices https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Term1 Divination</title>
+
+        <!-- including for some global styling -->
+        <link rel="stylesheet" href="../css/style.css">
+        <!-- if I had some styling I wanted to include on one special page -->
+        <link rel="stylesheet" href="css/demo-style.css">
+
+    </head>
+    <body>
+        <!-- if you have sub-pages think about adding a simple back button -->
+        <nav>
+            <a href="../">Back to Home</a>
+        </nav>
+        <header>
+            <h1>Divination</h1>
+            <p>It's a multi-media project mainly using openFrameworks, webcam, projector and glass. The moving object in the surroundings can be detected, and a synthetic video would appear at the top of screen to show that movement.</p>
+        </header>
+
+        <main>
+            <section>
+                <h3>Video</h3>
+                <div class="responsive-video">
+                    <iframe src="https://player.vimeo.com/video/793985049?h=9a8e81ca76" width="1000" height="500" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                    <p>openFrameworks,glass,paint,projection</p>
+                    <p>2023.1</p>
+                </div>
+                
+            </section>
+            <section>
+                <h3>Image</h3>
+                <img 
+                id="striped-image" 
+                src="../assets/images/cover.jpg"
+                alt="Divination"
+                srcset="../assets/images/cover.jpg 3024w"
+                sizes="(min-width: 600px) 600px, 60vw" />
+                <p>  </p>
+                <img 
+                id="striped-image" 
+                src="../assets/images/di-2.jpg"
+                alt="Divination"
+                srcset="../assets/images/di-2.png 3024w"
+                sizes="(min-width: 600px) 600px, 60vw" />
+            </section>
+
+        </main>
+
+        <footer>
+            <!-- normally information like contact details etc  -->
+            <!-- read more about semantic HTML https://www.w3schools.com/html/html5_semantic_elements.asp -->
+            
+         </footer>
+    </body>
+</html>

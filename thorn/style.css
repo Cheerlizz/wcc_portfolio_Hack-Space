@@ -1,0 +1,43 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+#gui-container{
+  position: fixed;
+  top: 0;
+  left: 10px;
+  z-index: 100;
+  width: 220px;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  background-color: rgba(73, 104, 111, 0.7);
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.button{
+  background-color: #fb18c2;
+  border: solid 1px #e51138;
+  border-radius: 4px;
+  color: rgb(211, 240, 22);
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  display: inline-block;
+  font-size: 16px;
+  min-width: 200px;
+  cursor: pointer;
+}
+.button:hover{
+  background-color:white;
+  color: #f63354;
+}

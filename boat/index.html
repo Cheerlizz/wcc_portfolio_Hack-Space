@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Boat Club</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="./style.css" type="text/css" />
+    </head>
+	<body>
+        
+		<div id="container"></div>
+	
+
+		<script id="fragment_shader2" type="x-shader/x-fragment">
+
+            uniform float time;
+            varying vec2 vUv;
+
+			float colormap_red(float x) {
+                if (x < 0.0) {
+                    return 54.0 / 255.0;
+                } else if (x < 20049.0 / 82979.0) {
+                    return (829.79 * x + 54.51) / 255.0;
+                } else {
+                    return 1.0;
+                }
+            }
+            
+            float colormap_green(float x) {
+                if (x < 20049.0 / 82979.0) {
+                    return 0.0;
+                } else if (x < 327013.0 / 810990.0) {
+                    return (8546482679670.0 / 10875673217.0 * x - 2064961390770.0 / 10875673217.0) / 255.0;
+                } else if (x <= 1.0) {
+                    return (103806720.0 / 483977.0 * x + 19607415.0 / 483977.0) / 255.0;
+                } else {
+                    return 1.0;
+                }
+            }
+            
+            float colormap_blue(float x) {
+                if (x < 0.0) {
+                    return 54.0 / 255.0;
+                } else if (x < 7249.0 / 82979.0) {
+                    return (829.79 * x + 54.51) / 255.0;
+                } else if (x < 20049.0 / 82979.0) {
+                    return 127.0 / 255.0;
+                } else if (x < 327013.0 / 810990.0) {
+                    return (792.02249341361393720147485376583 * x - 64.364790735602331034989206222672) / 255.0;
+                } else {
+                    return 1.0;
+                }
+            }
+            
+            vec4 colormap(float x) {
+                return vec4(colormap_red(x), colormap_green(x), colormap_blue(x), 1.0);
+            }
+            
+            
+            float rand(vec2 n) { 
+                return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+            }
+            
+            float noise(vec2 p){
+                vec2 ip = floor(p);
+                vec2 u = fract(p);
+                u = u*u*(3.0-2.0*u);
+            
+                float res = mix(
+                    mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),
+                    mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
+                return res*res;
+            }
+            
+            const mat2 mtx = mat2( 0.80,  0.60, -0.60,  0.80 );
+            
+            float fbm( vec2 p )
+            {
+                float f = 0.0;
+            
+                f += 0.500000*noise( p + time ); p = mtx*p*2.02;
+                f += 0.031250*noise( p ); p = mtx*p*2.01;
+                f += 0.250000*noise( p ); p = mtx*p*2.03;
+                f += 0.125000*noise( p ); p = mtx*p*2.01;
+                f += 0.062500*noise( p ); p = mtx*p*2.04;
+                f += 0.015625*noise( p + sin(time) );
+            
+                return f/0.96875;
+            }
+            
+            float pattern( in vec2 p )
+            {
+                return fbm( p + fbm( p + fbm( p ) ) );
+            }
+            
+            void main(void)
+            {
+                vec2 uv = -1.0 + 2.0 *vUv;
+                float shade = pattern(uv);
+                gl_FragColor = vec4(colormap(shade).rgb, shade);
+            }
+		</script>
+
+		
+        <script id="vertexShader" type="x-shader/x-vertex">
+
+            uniform vec2 uvScale;
+			varying vec2 vUv;
+
+			void main()
+			{
+				vUv = uvScale *uv;
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+				gl_Position = projectionMatrix * mvPosition;
+			}
+
+		</script>
+
+		<!-- Import maps polyfill -->
+		<!-- Remove this when import maps will be widely supported -->
+		<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://unpkg.com/three@0.146/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.146/examples/jsm/"
+				}
+			}
+		</script>
+
+		<script type="module">
+
+            //THREE library needs to modified to be local path
+            import * as THREE from 'three';
+            
+			import Stats from 'three/addons/libs/stats.module.js';
+            //import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
+            import { OrbitControls } from 'https://unpkg.com/three@0.146/examples/jsm/controls/OrbitControls.js';
+			import { EffectComposer } from 'https://unpkg.com/three@0.146/examples/jsm/postprocessing/EffectComposer.js';
+			import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+			import { RenderPass } from 'https://unpkg.com/three@0.146/examples/jsm/postprocessing/RenderPass.js';
+			import { FilmPass } from 'https://unpkg.com/three@0.146/examples/jsm/postprocessing/FilmPass.js';
+			import { BloomPass } from 'https://unpkg.com/three@0.146/examples/jsm/postprocessing/BloomPass.js';
+            import * as GeometryCompressionUtils from 'https://unpkg.com/three@0.146/examples/jsm/utils/GeometryCompressionUtils.js';
+			import * as BufferGeometryUtils from 'https://unpkg.com/three@0.146/examples/jsm/utils/BufferGeometryUtils.js';
+			import { Water } from 'https://unpkg.com/three@0.146/examples/jsm/objects/Water2.js';
+            import { SVGLoader } from "https://unpkg.com/three@0.146/examples/jsm/loaders/SVGLoader.js";
+            const statsEnabled = true;
+
+            import WebGL from 'https://unpkg.com/three@0.146/examples/jsm/capabilities/WebGL.js';
+            
+            if ( WebGL.isWebGL2Available() === false ) {
+
+                document.body.appendChild( WebGL.getWebGL2ErrorMessage() );
+
+                }
+
+			let stats,gui,params;
+
+			let camera, scene, renderer, composer,clock, controls, water, cameraPerspectiveHelper;
+
+			let uniforms1, uniforms2;
+
+            let shape, myMaterial, gem,gemMesh;
+
+			// geometry params
+			const radius = 1;
+            const position_x =  -6;
+            const position_y =  -1;
+            const position_z =  -3.2;
+
+
+			init();
+			animate();
+
+			function init() {
+
+				const container = document.getElementById( 'container' );
+
+				scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 3000 );
+				cameraPerspectiveHelper = new THREE.CameraHelper( camera );
+                //camera.position.x = 10;
+                camera.position.y = 1;
+                camera.position.z = 12;
+                
+
+				clock = new THREE.Clock();
+
+				//const geometry = new THREE.BoxGeometry( 1, 1, 0.75 );
+                const geometry = new THREE.CapsuleGeometry( 0.4, 0.4, 4, 10);
+
+
+                // water
+                
+
+				const waterGeometry = new THREE.PlaneGeometry( 12, 10 );
+
+				water = new Water( waterGeometry, {
+					color: '#ffffff',
+					scale: 5,
+					flowDirection: new THREE.Vector2( 1, 1 ),
+					textureWidth: 1024,
+					textureHeight: 1024
+				} );
+                water.position.x=position_x;
+				water.position.y = position_y-0.5;
+                water.position.z = position_z;
+				water.rotation.x = Math.PI * - 0.5;
+                water.rotation.z=-Math.PI/4;
+				scene.add( water );
+
+				// light
+
+				const ambientLight = new THREE.AmbientLight( 0xcccccc, 1 );
+				scene.add( ambientLight );
+
+				const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.4 );
+				directionalLight.position.set( - 1, 1, 1 );
+				scene.add( directionalLight );
+
+                const spaceTexture = new THREE.TextureLoader().load('./textures/lava/star.png');
+                scene.background = spaceTexture;
+
+				uniforms1 = {
+					'time': { value: 1.0 },
+                    'uvScale': { value: new THREE.Vector2( 1.0, 1.0 ) },
+                    'fogDensity': { value: 0.20 },
+					'fogColor': { value: new THREE.Vector3( 0, 0, 0 ) },
+					
+                    iGlobalTime:    { type: 'f', value: 0.1 },
+                    iChannel0:  { type: 't', value: new THREE.TextureLoader().load( 'textures/lava/cloud.jpg') },
+                    iChannel1:  { type: 't', value: new THREE.TextureLoader().load('textures/lava/dust.jpg' ) }
+				};
+                uniforms1.iChannel0.value.wrapS = uniforms1.iChannel0.value.wrapT = THREE.RepeatWrapping;
+                uniforms1.iChannel1.value.wrapS = uniforms1.iChannel1.value.wrapT = THREE.RepeatWrapping;
+
+
+				const params = [
+					[ 'fragment_shader1', uniforms1 ],
+					[ 'fragment_shader2', uniforms1 ],
+					[ 'fragment_shader4', uniforms1 ]
+				];
+
+
+                myMaterial = new THREE.ShaderMaterial( {
+
+                uniforms: params[ 0 ][ 1 ],
+                vertexShader: document.getElementById( 'vertexShader' ).textContent,
+                fragmentShader: document.getElementById( 'fragment_shader2').textContent
+                //transparent:true
+
+                } )
+
+                //draw the shape
+                const length = 0.5, width = 0.5;
+
+                const shape = new THREE.Shape();
+                shape.moveTo( 0,0 );
+                shape.lineTo( 0, width );
+                shape.lineTo( length, width );
+                shape.lineTo( length, 0 );
+                shape.lineTo( 0, 0 );
+
+                const extrudeSettings = {
+                    steps: 2,
+                    depth: 2.5,
+                    bevelEnabled: true,
+                    bevelThickness: 1.6,
+                    bevelSize: 2,
+                    
+                    bevelOffset:-1.5,
+                    bevelSegments: 1
+                };
+
+                addGem(extrudeSettings);
+
+                let closedSpline = new THREE.SplineCurve([
+                new THREE.Vector2( -10, 0 ),
+                new THREE.Vector2( -5, 5 ),
+                new THREE.Vector2( 0, 0 ),
+                new THREE.Vector2( 5, -5 ),
+                new THREE.Vector2( 10, 0 )
+                ]);
+
+                var frameSettings = {
+                    steps: 100,
+                    bevelEnabled: false,
+                    extrudePath: closedSpline
+                };
+
+            
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				container.appendChild( renderer.domElement );
+
+				stats = new Stats();
+				//container.appendChild( stats.dom );
+
+                renderer.autoClear = false;
+
+                controls = new OrbitControls( camera, renderer.domElement );
+
+                // make fog
+                const renderModel = new RenderPass( scene, camera );
+				const effectBloom = new BloomPass( 1.25 );
+				const effectFilm = new FilmPass( 0.35, 0.95, 2048, false );
+
+				composer = new EffectComposer( renderer );
+
+				composer.addPass( renderModel );
+				composer.addPass( effectBloom );
+				composer.addPass( effectFilm );
+
+                // gui
+
+				let gui = new GUI();
+                let gemFolder = gui.addFolder('gem');
+                gemFolder.add(extrudeSettings,'depth',0,5,0.1).onChange(function(){
+                    scene.remove(gemMesh);
+                    addGem(extrudeSettings);
+
+                });
+                gemFolder.add(extrudeSettings,'bevelThickness',0,5,0.1).onChange(function(){
+                    scene.remove(gemMesh);
+                    addGem(extrudeSettings);
+                });
+                gemFolder.add(extrudeSettings,'bevelSize',0,4,0.1).onChange(function(){
+                    scene.remove(gemMesh);
+                    addGem(extrudeSettings);
+                });
+                gemFolder.add(extrudeSettings,'bevelOffset',-4,2,0.1).onChange(function(){
+                    scene.remove(gemMesh);
+                    addGem(extrudeSettings);
+                });
+                gemFolder.add(extrudeSettings,'bevelSegments',1,5,1).onChange(function(){
+                    scene.remove(gemMesh);
+                    addGem(extrudeSettings);
+                });
+
+				onWindowResize();
+				window.addEventListener( 'resize', onWindowResize );
+
+			}
+            function addGem(extrudeSettings){
+                gem = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+                gemMesh = new THREE.Mesh( gem, myMaterial ) ;
+
+                gemMesh.position.x = position_x;
+				gemMesh.position.y = position_y+1.5;
+                gemMesh.position.z = position_z;
+                scene.add( gemMesh );
+            }
+
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+                composer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+				const delta = clock.getDelta();
+
+				uniforms1[ 'time' ].value += delta * 5;
+
+                gemMesh.rotation.y += delta * 0.5 * (- 1 );
+                gemMesh.rotation.x += delta * 0.5 * ( 1 );
+
+                renderer.clear();
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+        <h3><a href="../index.html">HOME</a></h3>
+	</body>
+</html>
